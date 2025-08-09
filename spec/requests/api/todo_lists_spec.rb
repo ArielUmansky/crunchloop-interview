@@ -180,4 +180,50 @@ RSpec.describe "TodoLists API", type: :request do
       end
     end
   end
+
+  describe "POST /api/todolists/:id/complete_all" do
+    let(:todo_list_param_id) { todo_list.id }
+
+    subject do
+      post "/api/todolists/#{todo_list_param_id}/complete_all"
+    end
+
+    it "returns http status accepted" do
+      subject
+      expect(response).to have_http_status(:accepted)
+    end
+
+    it "enqueues the job" do
+      expect {
+        subject
+      }.to have_enqueued_job(CompleteAllTodoListItemsJob).with(todo_list.id)
+    end
+
+    it "enqueues the expected json" do
+      subject
+      json = JSON.parse(response.body)
+      expect(json["message"]).to eq("Completing all items enqueued")
+    end
+
+    context "when todo_list not found" do
+      let(:todo_list_param_id) { 9999 }
+
+      it "returns 404" do
+        subject
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "returns the expected json structure" do
+        subject
+        json = JSON.parse(response.body)
+        expect(json["error"]).to eq("TodoList not found")
+      end
+
+      it "does not enqueue the job" do
+        expect {
+          subject
+        }.to_not have_enqueued_job(CompleteAllTodoListItemsJob).with(todo_list.id)
+      end
+    end
+  end
 end

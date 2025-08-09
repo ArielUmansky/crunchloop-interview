@@ -33,6 +33,16 @@ module Api
       head :no_content
     end
 
+    def complete_all
+      todo_list = TodoList.find_by(id: params[:id])
+      if todo_list
+        CompleteAllTodoListItemsJob.perform_later(todo_list.id)
+        render json: { message: "Completing all items enqueued" }, status: :accepted
+      else
+        render json: { error: "TodoList not found" }, status: :not_found
+      end
+    end
+    
     private
 
     def set_todo_list
