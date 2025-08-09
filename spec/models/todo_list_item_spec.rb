@@ -15,6 +15,13 @@ describe TodoListItem, type: :model do
       it "is valid" do
         expect(subject).to be_valid
       end
+
+      it 'allows same title in different todo lists' do
+        subject.save!
+        another_list = TodoList.create!(name: "Another List")
+        item = described_class.new(todo_list: another_list, title: "Unique Task")
+        expect(item).to be_valid
+      end
     end
 
     context "when title is blank" do
@@ -46,6 +53,21 @@ describe TodoListItem, type: :model do
       it "has a validation error on todo_list" do
         subject.validate
         expect(subject.errors[:todo_list]).to include("must exist")
+      end
+    end
+
+    context "when another task with the same title already exist for the list" do
+      let(:title) { "A title" }
+      let(:completed) { false }
+
+      before do
+        subject.save!
+      end
+
+      it 'is invalid' do
+        duplicate = described_class.new(todo_list: todo_list, title: title)
+        expect(duplicate).not_to be_valid
+        expect(duplicate.errors[:title]).to include("has already been taken")
       end
     end
   end
