@@ -1,0 +1,29 @@
+<h1><%= @todo_list.name %></h1>
+
+<h2>Tasks</h2>
+
+<% if @todo_list_items.any? %>
+  <ul class="todo-items-list">
+    <% @todo_list_items.each do |item| %>
+      <li class="<%= 'completed' if item.completed %>">
+        <%= item.title %>
+
+        <%= form_with(url: todo_list_todo_list_item_path(@todo_list, item), method: :patch, local: true, html: { class: "toggle-completed-form" }) do |f| %>
+          <%= f.check_box :completed, checked: item.completed, onchange: 'this.form.submit();' %>
+          <%= f.hidden_field :title, value: item.title %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No tasks found for this list.</p>
+<% end %>
+
+<h3>Add New Task</h3>
+
+<%= form_with(model: [@todo_list, TodoListItem.new], local: true, html: { class: "new-task-form" }) do |form| %>
+  <%= form.text_field :title, placeholder: "Task title", required: true %>
+  <%= form.submit "Add Task" %>
+<% end %>
+
+<%= link_to "Back to Lists", todo_lists_path, class: "btn btn-secondary" %>

@@ -1,0 +1,20 @@
+<div class="container">
+  <h1><%= @todo_list.name %> - Items</h1>
+
+  <ul class="todo-list">
+    <% @todo_list.todo_list_items.each do |item| %>
+      <li class="<%= 'completed' if item.completed %>">
+        <span><%= item.title %></span>
+        <%= link_to 'Toggle Complete', toggle_complete_todo_list_todo_list_item_path(@todo_list, item), method: :patch %>
+        <%= link_to 'Delete', todo_list_todo_list_item_path(@todo_list, item), method: :delete, data: { confirm: 'Are you sure?' } %>
+      </li>
+    <% end %>
+  </ul>
+
+  <h2>New Item</h2>
+
+  <%= form_with(model: [@todo_list, TodoListItem.new], local: true, html: { class: 'new-todo' }) do |form| %>
+    <%= form.text_field :title, placeholder: "Enter item title" %>
+    <%= form.submit "Add" %>
+  <% end %>
+</div>

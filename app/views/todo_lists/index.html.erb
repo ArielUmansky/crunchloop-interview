@@ -1,9 +1,18 @@
-<%= link_to 'Add Todo List', new_todo_list_path %>
+<div class="container">
+  <h1>Todo Lists</h1>
+  
+  <ul class="todo-list">
+    <% @todo_lists.each do |list| %>
+      <li>
+        <%= link_to list.name, todo_list_path(list) %>
+      </li>
+    <% end %>
+  </ul>
 
-<div>
-  <% @todo_lists.each do |todo_list| %>
-    <div>
-      #<%= todo_list.id %> | <%= todo_list.name %>
-    </div>
+  <h2>New Todo List</h2>
+
+  <%= form_with(model: @todo_list, local: true, html: { class: 'new-todo' }) do |form| %>
+    <%= form.text_field :name, placeholder: "Enter list name" %>
+    <%= form.submit "Create" %>
   <% end %>
 </div>
