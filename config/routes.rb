@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   end
 
   resources :todo_lists, path: 'todolists', only: [:index, :show, :new, :create] do
+    member do
+      post :complete_all
+    end
     resources :todo_list_items, only: [:create, :update]
   end
   

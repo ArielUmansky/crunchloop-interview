@@ -1,0 +1,16 @@
+  <ul id="todo_list_items" class="todo-items-list">
+    <% if todo_list_items.any? %>
+      <% todo_list_items.each do |item| %>
+        <li class="<%= 'completed' if item.completed %>">
+          <%= item.title %>
+
+          <%= form_with(url: todo_list_todo_list_item_path(todo_list, item), method: :patch, local: true, html: { class: "toggle-completed-form" }) do |f| %>
+            <%= f.check_box :completed, checked: item.completed, onchange: 'this.form.submit();' %>
+            <%= f.hidden_field :title, value: item.title %>
+          <% end %>
+        </li>
+      <% end %>
+    <% else %>
+      lasdlasldasd
+    <% end %>
+  </ul>

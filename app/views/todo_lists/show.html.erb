@@ -2,28 +2,19 @@
 
 <h2>Tasks</h2>
 
-<% if @todo_list_items.any? %>
-  <ul class="todo-items-list">
-    <% @todo_list_items.each do |item| %>
-      <li class="<%= 'completed' if item.completed %>">
-        <%= item.title %>
-
-        <%= form_with(url: todo_list_todo_list_item_path(@todo_list, item), method: :patch, local: true, html: { class: "toggle-completed-form" }) do |f| %>
-          <%= f.check_box :completed, checked: item.completed, onchange: 'this.form.submit();' %>
-          <%= f.hidden_field :title, value: item.title %>
-        <% end %>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>No tasks found for this list.</p>
-<% end %>
+<%= turbo_stream_from "todo_list_#{@todo_list.id}_items" %>
 
 <h3>Add New Task</h3>
 
-<%= form_with(model: [@todo_list, TodoListItem.new], local: true, html: { class: "new-task-form", data: { turbo: false } }) do |form| %>
+<%= form_with(model: [@todo_list, TodoListItem.new], local: false, html: { class: "new-task-form" }) do |form| %>
   <%= form.text_field :title, placeholder: "Task title", required: true %>
   <%= form.submit "Add Task" %>
 <% end %>
 
+<%= form_with url: complete_all_todo_list_path(@todo_list), method: :post, data: { turbo: true } do |f| %>
+  <%= f.submit "Complete All", class: "btn btn-primary" %>
+<% end %>
+
 <%= link_to "Back to Lists", todo_lists_path, class: "btn btn-secondary" %>
+
+<%= render partial: "todo_list_items/todo_list_items", locals: { todo_list: @todo_list, todo_list_items: @todo_list.todo_list_items } %>
