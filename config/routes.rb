@@ -11,11 +11,11 @@ Rails.application.routes.draw do
 
   end
 
-  resources :todo_lists, path: 'todolists', only: [:index, :show, :new, :create] do
+  resources :todo_lists, path: 'todolists', only: [:index, :show, :new, :create, :destroy] do
     member do
       post :complete_all
     end
-    resources :todo_list_items, only: [:create, :update]
+    resources :todo_list_items, only: [:create, :update, :destroy]
   end
   
   mount Sidekiq::Web => '/sidekiq'

@@ -20,6 +20,17 @@ class TodoListItemsController < ApplicationController
     end
   end
 
+  def destroy
+    @todo_list = TodoList.find(params[:todo_list_id])
+    @todo_list_item = @todo_list.todo_list_items.find(params[:id])
+    @todo_list_item.destroy
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to todo_list_path(@todo_list), notice: "Task deleted." }
+    end
+  end
+
   private
 
   def set_todo_list
