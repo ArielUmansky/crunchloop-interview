@@ -33,3 +33,70 @@ Check integration tests at: (https://github.com/crunchloop/interview-tests)
 ![crunchloop](https://s3.amazonaws.com/crunchloop.io/logo-blue.png)
 
 We strongly believe in giving back :rocket:. Let's work together [`Get in touch`](https://crunchloop.io/#contact).
+
+## Installation
+
+### Setup Redis
+This project uses Sidekiq with Redis as its queue database. Please make sure to have it installed:
+
+```bash
+# macOS (Homebrew):
+brew install redis
+```
+```bash
+# Ubuntu/Debian:
+sudo apt update
+sudo apt install redis-server
+```
+
+Start redis server:
+```shell
+sudo systemctl enable redis-server
+sudo systemctl start redis-server
+```
+Verify Redis is running:
+```shell
+redis-cli ping  # Should return "PONG"
+```
+### Set Up the Database
+Run the migrations to prepare your database.
+
+```shell
+bin/rails db:create db:migrate
+```
+
+## Cold Start
+When you start your development machine and want to run the app, follow these steps:
+
+1. Start Redis
+```shell
+redis-server
+```
+Or verify the redis service is up and running:
+```shell
+sudo systemctl status redis
+```
+
+2. Start Sidekiq
+```shell
+bundle exec sidekiq  # Run in a in its own terminal
+```
+
+3. Start the Rails Server
+```shell
+rails server
+```
+4. Access the App
+Open http://localhost:3000 in your browser
+
+### Notes
+- Font Awesome icons are handled via the font-awesome-sass gem:
+- Sidekiq Web UI (for job monitoring) can be enabled in routes.rb via ´/sidekiq´
+
+## Complete All Feature Explanation
+ - User clicks Complete All button on a TodoList show page
+ - Button triggers a controller action that enqueues a Sidekiq job
+ - Sidekiq job marks all items completed for that list using logic encapsulated and tested in the proper model
+ - When done, the job broadcasts a Turbo Stream update
+ - The browser receives the Turbo Stream, and updates the UI live (tasks mark completed)
+ - User sees the updated list without refreshing
