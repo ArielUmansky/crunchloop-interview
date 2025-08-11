@@ -1,3 +1,16 @@
+# Demo
+You can see it [here](https://github.com/user-attachments/assets/cfdfc582-3e7f-421e-ad83-9648feff9d80)
+## Notes
+ - Mobile first design. Even though some support for responsiveness was done, a big design change wasn't needed on vertical resolutions
+ - This is not the final version. For sure there're things to do like editing fields, minor design details, etc, but I made the promise to deliver by today
+### Complete All Feature Explanation
+ - User clicks Complete All button on a TodoList show page
+ - Button triggers a controller action that enqueues a Sidekiq job
+ - Sidekiq job marks all items completed for that list using logic encapsulated and tested in the proper model
+ - When done, the job broadcasts a Turbo Stream update
+ - The browser receives the Turbo Stream, and updates the UI live (tasks mark completed and progress percentage updated)
+ - User sees the updated list without refreshing
+
 # rails-interview / TodoApi
 
 [![Open in Coder](https://dev.crunchloop.io/open-in-coder.svg)](https://dev.crunchloop.io/templates/fly-containers/workspace?param.Git%20Repository=git@github.com:crunchloop/rails-interview.git)
@@ -92,11 +105,3 @@ Open http://localhost:3000 in your browser
 ### Notes
 - Font Awesome icons are handled via the font-awesome-sass gem:
 - Sidekiq Web UI (for job monitoring) can be enabled in routes.rb via ´/sidekiq´
-
-## Complete All Feature Explanation
- - User clicks Complete All button on a TodoList show page
- - Button triggers a controller action that enqueues a Sidekiq job
- - Sidekiq job marks all items completed for that list using logic encapsulated and tested in the proper model
- - When done, the job broadcasts a Turbo Stream update
- - The browser receives the Turbo Stream, and updates the UI live (tasks mark completed)
- - User sees the updated list without refreshing
