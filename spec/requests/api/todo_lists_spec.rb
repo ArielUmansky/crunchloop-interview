@@ -30,7 +30,7 @@ RSpec.describe "TodoLists API", type: :request do
 
       it "returns the expected structure" do
         subject
-        expect(JSON.parse(response.body)).to eq({ "id" => todo_list.id, "name" => todo_list.name })
+        expect(JSON.parse(response.body)).to eq({ "id" => todo_list.id, "name" => todo_list.name, "progress" => 0 })
       end
     end
 

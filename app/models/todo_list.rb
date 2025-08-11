@@ -6,4 +6,12 @@ class TodoList < ApplicationRecord
   def complete_all_items!
     todo_list_items.where(completed: false).update_all(completed: true)
   end
+
+  def progress
+    total = todo_list_items.count
+    return 0 if total.zero?
+
+    completed = todo_list_items.where(completed: true).count
+    ((completed.to_f / total) * 100).round
+  end
 end

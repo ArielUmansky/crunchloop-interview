@@ -7,14 +7,18 @@ class CompleteAllTodoListItemsJob < ApplicationJob
 
     todo_list.complete_all_items!
 
-    puts "Broadcasting to: todo_list_#{todo_list.id}_items, locals: { todo_list: #{todo_list.to_s}, todo_list_items: #{todo_list.todo_list_items.to_s}"
-
-    # Broadcast Turbo Stream update for this todo list's items
     Turbo::StreamsChannel.broadcast_replace_to(
       "todo_list_#{todo_list.id}_items",
       target: "todo_list_items",
       partial: "todo_list_items/todo_list_items",
       locals: { todo_list: todo_list, todo_list_items: todo_list.todo_list_items }
+    )
+
+    Turbo::StreamsChannel.broadcast_replace_to(
+      "todo_list_#{todo_list.id}_items",
+      target: "progress_todo_list_#{todo_list.id}",
+      partial: "todo_lists/progress",
+      locals: { todo_list: todo_list }
     )
   end
 end

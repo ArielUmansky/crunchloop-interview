@@ -39,7 +39,7 @@ describe Api::TodoListsController, type: :controller do
       it "returns the todo list" do
         subject
         json = JSON.parse(response.body)
-        expect(json).to eq({ "id" => todo_list.id, "name" => todo_list.name })
+        expect(json).to eq({ "id" => todo_list.id, "name" => todo_list.name, "progress" => 0 })
       end
     end
 

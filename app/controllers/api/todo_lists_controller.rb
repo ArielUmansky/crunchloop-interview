@@ -4,17 +4,17 @@ module Api
 
     def index
       @todo_lists = TodoList.all
-      render json: @todo_lists.as_json(only: [:id, :name]), status: :ok
+      render json: @todo_lists.as_json(methods: :progress, only: [:id, :name]), status: :ok
     end
 
     def show
-      render json: @todo_list.as_json(only: [:id, :name]), status: :ok
+      render json: @todo_list.as_json(methods: :progress, only: [:id, :name]), status: :ok
     end
 
     def create
       @todo_list = TodoList.new(todo_list_params)
       if @todo_list.save
-        render json: @todo_list.as_json(only: [:id, :name]), status: :created
+        render json: @todo_list.as_json(methods: :progress, only: [:id, :name]), status: :created
       else
         render json: { errors: @todo_list.errors.full_messages }, status: :unprocessable_entity
       end
@@ -22,7 +22,7 @@ module Api
 
     def update
       if @todo_list.update(todo_list_params)
-        render json: @todo_list.as_json(only: [:id, :name]), status: :ok
+        render json: @todo_list.as_json(methods: :progress, only: [:id, :name]), status: :ok
       else
         render json: { errors: @todo_list.errors.full_messages }, status: :unprocessable_entity
       end

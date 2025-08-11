@@ -13,7 +13,7 @@ RSpec.describe TodoList, type: :model do
     subject do
       described_class.new(name: 'Groceries')
     end
-    
+
     it 'is valid with a unique name' do
       expect(subject).to be_valid
     end
@@ -47,6 +47,44 @@ RSpec.describe TodoList, type: :model do
       subject
 
       expect(completed_item.reload.completed).to eq(true)
+    end
+  end
+
+  describe '#progress' do
+    let!(:progress_todo_list) { TodoList.create!(name: "Progress List") }
+
+    subject do
+      progress_todo_list.progress
+    end
+
+    context 'when there are no items' do
+      it { is_expected.to eq(0) }
+    end
+
+    context 'when none are completed' do
+      before do
+        progress_todo_list.todo_list_items.create!(title: "Task 1", completed: false) 
+      end
+
+      it { is_expected.to eq(0) }
+    end
+
+    context 'when some are completed' do
+      before do
+        progress_todo_list.todo_list_items.create!(title: "Task 1", completed: false) 
+        progress_todo_list.todo_list_items.create!(title: "Task 2", completed: true) 
+      end
+
+      it { is_expected.to eq(50) }
+    end
+
+    context 'when all are completed' do
+      before do
+        progress_todo_list.todo_list_items.create!(title: "Task 1", completed: true) 
+        progress_todo_list.todo_list_items.create!(title: "Task 2", completed: true) 
+      end
+
+      it { is_expected.to eq(100) }
     end
   end
 end
