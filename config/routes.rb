@@ -6,7 +6,7 @@ Rails.application.routes.draw do
       member do
         post :complete_all
       end
-      resources :todo_list_items, controller: 'todo_list_items', only: [:index, :show, :create, :update, :destroy]
+      resources :todo_list_items, path: "todos", controller: 'todo_list_items', only: [:index, :show, :create, :update, :destroy]
     end
 
   end

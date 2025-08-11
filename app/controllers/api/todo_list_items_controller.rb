@@ -4,25 +4,25 @@ module Api
     before_action :set_todo_list_item, only: [:show, :update, :destroy]
 
     def index
-      render json: @todo_list.todo_list_items.select(:id, :title, :completed), status: :ok
+      render json: @todo_list.todo_list_items.map { |item| item_json(item) }, status: :ok
     end
 
     def show
-      render json: @todo_list_item.slice(:id, :title, :completed), status: :ok
+      render json: item_json(@todo_list_item), status: :ok
     end
 
     def create
-      item = @todo_list.todo_list_items.new(todo_list_item_params)
+      item = @todo_list.todo_list_items.new(mapped_todo_list_item_params)
       if item.save
-        render json: item.slice(:id, :title, :completed), status: :created
+        render json: item_json(item), status: :created
       else
         render json: { errors: item.errors.full_messages }, status: :unprocessable_entity
       end
     end
 
     def update
-      if @todo_list_item.update(todo_list_item_params)
-        render json: @todo_list_item.slice(:id, :title, :completed), status: :ok
+      if @todo_list_item.update(mapped_todo_list_item_params)
+        render json: item_json(@todo_list_item), status: :ok
       else
         render json: { errors: @todo_list_item.errors.full_messages }, status: :unprocessable_entity
       end
@@ -46,7 +46,23 @@ module Api
     end
 
     def todo_list_item_params
-      params.permit(:title, :completed)
+      params.permit(:title, :description, :completed)
+    end
+
+    def mapped_todo_list_item_params
+      attrs = todo_list_item_params.to_h
+      if attrs.key?("description")
+        attrs["title"] = attrs.delete("description")
+      end
+      attrs
+    end
+
+    def item_json(item)
+      {
+        id: item.id,
+        description: item.title,
+        completed: item.completed
+      }
     end
   end
 end

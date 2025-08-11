@@ -5,10 +5,10 @@ RSpec.describe "TodoListItems API", type: :request do
   let!(:item) { todo_list.todo_list_items.create!(title: "Install Ruby", completed: false) }
   let(:list_id_param) { todo_list.id }
 
-  describe "GET /api/todolists/:todo_list_id/todo_list_items" do
+  describe "GET /api/todolists/:todo_list_id/todos" do
 
     subject do
-      get "/api/todolists/#{list_id_param}/todo_list_items"
+      get "/api/todolists/#{list_id_param}/todos"
     end
 
     it "returns http status ok" do
@@ -18,7 +18,7 @@ RSpec.describe "TodoListItems API", type: :request do
 
     it "returns all items for that list" do
       subject
-      expect(JSON.parse(response.body)).to include(include("id" => item.id, "title" => item.title, "completed" => item.completed))
+      expect(JSON.parse(response.body)).to include(include("id" => item.id, "description" => item.title, "completed" => item.completed))
     end
 
     context "if the list does not exis" do
@@ -37,10 +37,10 @@ RSpec.describe "TodoListItems API", type: :request do
     end
   end
 
-  describe "GET /api/todolists/:todo_list_id/todo_list_items/:id" do
+  describe "GET /api/todolists/:todo_list_id/todos/:id" do
     
     subject do
-      get "/api/todolists/#{list_id_param}/todo_list_items/#{param_id}"
+      get "/api/todolists/#{list_id_param}/todos/#{param_id}"
     end
 
     context "if the list does not exis" do
@@ -70,7 +70,7 @@ RSpec.describe "TodoListItems API", type: :request do
 
       it "returns the expected structure" do
         subject
-        expect(JSON.parse(response.body)).to eq({ "id" => item.id, "title" => item.title, "completed" => item.completed })
+        expect(JSON.parse(response.body)).to eq({ "id" => item.id, "description" => item.title, "completed" => item.completed })
       end
     end
 
@@ -90,9 +90,9 @@ RSpec.describe "TodoListItems API", type: :request do
     end
   end
 
-  describe "POST /api/todolists/:todo_list_id/todo_list_items" do
+  describe "POST /api/todolists/:todo_list_id/todos" do
     subject do
-      post "/api/todolists/#{list_id_param}/todo_list_items", params: params
+      post "/api/todolists/#{list_id_param}/todos", params: params
     end
 
 
@@ -132,7 +132,7 @@ RSpec.describe "TodoListItems API", type: :request do
       it "returns the new item structure" do
         subject
         json = JSON.parse(response.body)
-        expect(json).to include("id", "title" => "Configure DB", "completed" => false)
+        expect(json).to include("id", "description" => "Configure DB", "completed" => false)
       end
     end
 
@@ -156,11 +156,11 @@ RSpec.describe "TodoListItems API", type: :request do
     end
   end
 
-  describe "PUT /api/todolists/:todo_list_id/todo_list_items/:id" do
+  describe "PUT /api/todolists/:todo_list_id/todos/:id" do
     let(:list_item_id_param) { item.id }
     
     subject do
-      put "/api/todolists/#{list_id_param}/todo_list_items/#{list_item_id_param}", params: params
+      put "/api/todolists/#{list_id_param}/todos/#{list_item_id_param}", params: params
     end
 
 
@@ -218,7 +218,7 @@ RSpec.describe "TodoListItems API", type: :request do
       it "returns the updated item" do
         subject
         json = JSON.parse(response.body)
-        expect(json).to eq({ "id" => item.id, "title" => "Updated Title", "completed" => true })
+        expect(json).to eq({ "id" => item.id, "description" => "Updated Title", "completed" => true })
       end
     end
 
@@ -244,11 +244,11 @@ RSpec.describe "TodoListItems API", type: :request do
     end
   end
 
-  describe "DELETE /api/todolists/:todo_list_id/todo_list_items/:id" do
+  describe "DELETE /api/todolists/:todo_list_id/todos/:id" do
     let(:list_item_id_param) { item.id }
 
     subject do
-      delete "/api/todolists/#{list_id_param}/todo_list_items/#{list_item_id_param}"
+      delete "/api/todolists/#{list_id_param}/todos/#{list_item_id_param}"
     end
 
     it "deletes the item" do
