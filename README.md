@@ -15,38 +15,6 @@ You can see it [here](https://github.com/user-attachments/assets/cfdfc582-3e7f-4
 
 [![Open in Coder](https://dev.crunchloop.io/open-in-coder.svg)](https://dev.crunchloop.io/templates/fly-containers/workspace?param.Git%20Repository=git@github.com:crunchloop/rails-interview.git)
 
-This is a simple Todo List API built in Ruby on Rails 7. This project is currently being used for Ruby full-stack candidates.
-
-## Build
-
-To build the application:
-
-`bin/setup`
-
-## Run the API
-
-To run the TodoApi in your local environment:
-
-`bin/puma`
-
-## Test
-
-To run tests:
-
-`bin/rspec`
-
-Check integration tests at: (https://github.com/crunchloop/interview-tests)
-
-## Contact
-
-- Santiago Doldán (sdoldan@crunchloop.io)
-
-## About Crunchloop
-
-![crunchloop](https://s3.amazonaws.com/crunchloop.io/logo-blue.png)
-
-We strongly believe in giving back :rocket:. Let's work together [`Get in touch`](https://crunchloop.io/#contact).
-
 ## Installation
 
 ### Setup Redis
@@ -105,3 +73,36 @@ Open http://localhost:3000 in your browser
 ### Notes
 - Font Awesome icons are handled via the font-awesome-sass gem:
 - Sidekiq Web UI (for job monitoring) can be enabled in routes.rb via ´/sidekiq´
+
+
+This is a simple Todo List API built in Ruby on Rails 7. This project is currently being used for Ruby full-stack candidates.
+
+## Build
+
+To build the application:
+
+`bin/setup`
+
+## Run the API
+
+To run the TodoApi in your local environment:
+
+`bin/puma`
+
+## Test
+
+To run tests:
+
+`bin/rspec`
+
+Check integration tests at: (https://github.com/crunchloop/interview-tests)
+
+## Contact
+
+- Santiago Doldán (sdoldan@crunchloop.io)
+
+## About Crunchloop
+
+![crunchloop](https://s3.amazonaws.com/crunchloop.io/logo-blue.png)
+
+We strongly believe in giving back :rocket:. Let's work together [`Get in touch`](https://crunchloop.io/#contact).
