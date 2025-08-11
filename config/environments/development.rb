@@ -18,6 +18,9 @@ Rails.application.configure do
   # Do not eager load code on boot.
   config.eager_load = false
 
+  config.hotwire_livereload.force_reload_paths << Rails.root.join("app/assets/stylesheets")
+  config.middleware.insert_after(ActionDispatch::Static, Rack::LiveReload)
+
   # Show full error reports.
   config.consider_all_requests_local = true
 

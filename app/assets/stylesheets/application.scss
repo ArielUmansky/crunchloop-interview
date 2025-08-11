@@ -1,19 +1,46 @@
 @import "font-awesome";
 @import "todo_lists";
 
-.flash {
-  padding: 10px 15px;
-  margin: 10px 0;
-  border-radius: 5px;
-  width: fit-content;
-}
+.flash-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  max-width: 320px;
+  z-index: 9999;
+  pointer-events: none;
+  
+  &.flash-hide {
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
 
-.notice {
-  background-color: #d4edda;
-  color: #155724;
-}
+  &.flash-show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
 
-.alert {
-  background-color: #f8d7da;
-  color: #721c24;
+  .flash {
+    padding: 10px 15px;
+    margin: 5px 0;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    font-weight: 600;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    opacity: 1;
+  }
+
+  .notice {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  .alert {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
 }

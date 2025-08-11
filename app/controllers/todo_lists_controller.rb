@@ -21,6 +21,7 @@ class TodoListsController < ApplicationController
       redirect_to todo_lists_path, notice: "Todo list created successfully"
     else
       @todo_lists = TodoList.all
+      flash.now[:alert] = @todo_list.errors.full_messages.to_sentence
       render :index, status: :unprocessable_entity
     end
   end

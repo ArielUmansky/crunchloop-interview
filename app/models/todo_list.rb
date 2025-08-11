@@ -1,5 +1,5 @@
 class TodoList < ApplicationRecord
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: { case_sensitive: false }
 
   has_many :todo_list_items, dependent: :destroy
 

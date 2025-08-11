@@ -1,20 +1,27 @@
-<h1><%= @todo_list.name %></h1>
+<div class="crunchloop-container">
+  <img src="/images/crunchloop.svg" alt="Crunchloop" class="crunchloop-logo" />
 
-<h2>Tasks</h2>
+  <div class="crunchloop-main-title-container">
+    <h1 class="crunchloop-main-title"><%= @todo_list.name %></h1>
+  </div>
 
-<%= turbo_stream_from "todo_list_#{@todo_list.id}_items" %>
 
-<h3>Add New Task</h3>
+  <div class="crunchloop-actions-title-container">
+    <%= link_to "Back to Lists", todo_lists_path, class: "btn btn-secondary" %>
+    <%= form_with url: complete_all_todo_list_path(@todo_list), method: :post, data: { turbo: true } do |f| %>
+      <%= f.submit "Complete All", class: "crunchloop-button" %>
+    <% end %>
+  </div>
 
-<%= form_with(model: [@todo_list, TodoListItem.new], local: false, html: { class: "new-task-form" }) do |form| %>
-  <%= form.text_field :title, placeholder: "Task title", required: true %>
-  <%= form.submit "Add Task" %>
-<% end %>
+  <%= turbo_stream_from "todo_list_#{@todo_list.id}_items" %>
 
-<%= form_with url: complete_all_todo_list_path(@todo_list), method: :post, data: { turbo: true } do |f| %>
-  <%= f.submit "Complete All", class: "btn btn-primary" %>
-<% end %>
+  <h2 class="crunchloop-subtitle">Add Task</h2>
+  
+  <%= form_with(model: [@todo_list, TodoListItem.new], local: false, html: { class: "crunchloop-new-todo" }) do |form| %>
+    <%= form.text_field :title, placeholder: "Task title", required: true %>
+    <%= form.submit "Add Task" %>
+  <% end %>
 
-<%= link_to "Back to Lists", todo_lists_path, class: "btn btn-secondary" %>
 
-<%= render partial: "todo_list_items/todo_list_items", locals: { todo_list: @todo_list, todo_list_items: @todo_list.todo_list_items } %>
+  <%= render partial: "todo_list_items/todo_list_items", locals: { todo_list: @todo_list, todo_list_items: @todo_list.todo_list_items } %>
+</div>

@@ -7,6 +7,29 @@ RSpec.describe TodoList, type: :model do
   let!(:item2) { todo_list.todo_list_items.create!(title: "Task 2", completed: false) }
   let!(:completed_item) { todo_list.todo_list_items.create!(title: "Task 3", completed: true) }
 
+
+  describe 'validations' do
+
+    subject do
+      described_class.new(name: 'Groceries')
+    end
+    
+    it 'is valid with a unique name' do
+      expect(subject).to be_valid
+    end
+
+    it 'is not valid without a name' do
+      subject.name = nil
+      expect(subject).not_to be_valid
+    end
+
+    it 'is not valid with a duplicate name (case insensitive)' do
+      described_class.create!(name: 'Groceries')
+      subject.name = 'groceries'
+      expect(subject).not_to be_valid
+    end
+  end
+
   describe "#complete_all_items!" do
     subject do
       todo_list.complete_all_items!

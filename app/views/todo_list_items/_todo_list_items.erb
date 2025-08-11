@@ -1,20 +1,52 @@
-<ul id="todo_list_items" class="todo-items-list">
+<div id="todo_list_items" class="crunchloop-todo-list">
   <% todo_list_items.each do |item| %>
-    <li id="<%= dom_id(item) %>" class="<%= 'completed' if item.completed %>">
-      <%= item.title %>
+    <div id="<%= dom_id(item) %>" 
+        class="crunchloop-todo-list-slot <%= 'crunchloop-completed' if item.completed %>"
+        onclick="toggleItemCompletion(event, '<%= dom_id(item, :form) %>')">
 
-      <%= form_with(url: todo_list_todo_list_item_path(todo_list, item), method: :patch, local: true, html: { class: "toggle-completed-form" }) do |f| %>
-        <%= f.check_box :completed, checked: item.completed, onchange: 'this.form.submit();' %>
-        <%= f.hidden_field :title, value: item.title %>
-      <% end %>
+      <div class="crunchloop-toggle-completed-form">
+        <% if item.completed %>
+          <i class="crunchloop-check-icon fa fa-circle-check fa-xl" aria-hidden="true"></i>
+        <% else %>
+          <i class="crunchloop-check-icon fa fa-circle fa-xl" aria-hidden="true"></i>
+        <% end %>
+
+        <%= form_with(model: [todo_list, item], 
+                      method: :patch, 
+                      local: true, 
+                      id: dom_id(item, :form), 
+                      style: "display:none") do |f| %>
+          <%= f.check_box :completed, checked: item.completed, id: dom_id(item, :checkbox) %>
+          <%= f.hidden_field :title, value: item.title %>
+        <% end %>
+
+        <span class="crunchloop-todo-list-name"><%= item.title %></span>
+      </div>
 
       <%= button_to todo_list_todo_list_item_path(todo_list, item),
                     method: :delete,
                     form: { data: { turbo_confirm: "Are you sure?" } },
-                    class: "btn btn-link delete-task-button",
-                    title: "Delete task" do %>
-        <i class="fas fa-trash"></i> 
+                    class: "crunchloop-delete-list-button",
+                    title: "Delete task",
+                    onclick: "event.stopPropagation();" do %>
+        <i class="fa-solid fa-circle-xmark fa-x"></i>
       <% end %>
-    </li>
+    </div>
   <% end %>
-</ul>
+</div>
+
+<script>
+  function toggleItemCompletion(event, formId) {
+    // Don’t trigger when clicking the delete button
+    if (event.target.closest('.crunchloop-delete-list-button')) return;
+
+    const form = document.getElementById(formId);
+    if (!form) return;
+
+    const checkbox = form.querySelector('input[type="checkbox"]');
+    if (checkbox) {
+      checkbox.checked = !checkbox.checked; // toggle
+    }
+    form.submit(); // submit PATCH request
+  }
+</script>

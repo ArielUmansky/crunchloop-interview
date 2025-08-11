@@ -60,6 +60,10 @@ group :development do
   gem "web-console"
 
   gem "rspec-rails"
+  gem "guard", require: false
+  gem "guard-livereload", require: false
+  gem "rack-livereload"
+  gem "rb-fsevent", require: false
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
@@ -75,3 +79,5 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+
+gem "hotwire-livereload", "~> 2.0", :group => :development

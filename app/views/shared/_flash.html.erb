@@ -1,0 +1,7 @@
+<% if flash.any? %>
+  <div id="flash-messages" class="flash-container" role="alert" aria-live="assertive" aria-atomic="true">
+    <% flash.each do |type, message| %>
+      <p class="flash <%= type %>"><%= message %></p>
+    <% end %>
+  </div>
+<% end %>
